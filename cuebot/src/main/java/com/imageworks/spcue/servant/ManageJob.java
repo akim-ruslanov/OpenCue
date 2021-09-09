@@ -471,7 +471,8 @@ public class ManageJob extends JobInterfaceGrpc.JobInterfaceImplBase {
             manageQueue.execute(
                     new DispatchKillFrames(
                             frameSearchFactory.create(job, request.getReq()),
-                            new Source(request.toString()),
+                            new Source(request.toString(), request.getUsername(), request.getPid(),
+                                       request.getHostKill(), request.getReason()),
                             jobManagerSupport));
             responseObserver.onNext(JobKillFramesResponse.newBuilder().build());
             responseObserver.onCompleted();

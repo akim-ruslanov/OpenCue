@@ -189,7 +189,8 @@ public class ManageLayer extends LayerInterfaceGrpc.LayerInterfaceImplBase {
     public void killFrames(LayerKillFramesRequest request, StreamObserver<LayerKillFramesResponse> responseObserver) {
         updateLayer(request.getLayer());
         manageQueue.execute(new DispatchKillFrames(frameSearch,
-                new Source(request.toString()), jobManagerSupport));
+                new Source(request.toString(), request.getUsername(), request.getPid(),
+                           request.getHostKill(), request.getReason()), jobManagerSupport));
         responseObserver.onNext(LayerKillFramesResponse.newBuilder().build());
         responseObserver.onCompleted();
     }
