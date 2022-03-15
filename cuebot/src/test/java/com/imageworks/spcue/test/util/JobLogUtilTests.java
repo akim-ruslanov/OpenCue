@@ -36,56 +36,32 @@ public class JobLogUtilTests extends AbstractTransactionalJUnit4SpringContextTes
     @Resource
     private JobLogUtil jobLogUtil;
 
-    private String logRootDefault;
-    private String logRootSomeOs;
+    private String logRoot;
 
     @Before
     public void setUp() {
-        // The values should match what's defined in test/resources/opencue.properties.
-        logRootDefault = "/arbitraryLogDirectory";
-        logRootSomeOs = "/arbitrarySomeOsDirectory";
+        // This value should match what's defined in test/resources/opencue.properties.
+        logRoot = "/arbitraryLogDirectory";
     }
 
     @Test
-    public void testGetJobLogRootDirDefault() {
-        assertEquals(logRootDefault, jobLogUtil.getJobLogRootDir("someUndefinedOs"));
+    public void testGetJobLogRootDir() {
+        assertEquals(logRoot, jobLogUtil.getJobLogRootDir());
     }
 
     @Test
-    public void testGetJobLogRootDirSomeOs() {
-        assertEquals(logRootSomeOs, jobLogUtil.getJobLogRootDir("some_os"));
+    public void testGetJobLogDir() {
+        assertEquals(logRoot + "/show/shot/logs", jobLogUtil.getJobLogDir("show", "shot"));
     }
 
     @Test
-    public void testGetJobLogDirDefault() {
-        assertEquals(logRootDefault + "/show/shot/logs", jobLogUtil.getJobLogDir("show", "shot", "someUndefinedOs"));
-    }
-
-    @Test
-    public void testGetJobLogDirSomeOs() {
-        assertEquals(logRootSomeOs + "/show/shot/logs", jobLogUtil.getJobLogDir("show", "shot", "some_os"));
-    }
-
-    @Test
-    public void testGetJobLogPathDefault() {
+    public void testGetJobLogPath() {
         JobDetail jobDetail = new JobDetail();
         jobDetail.id = "id";
         jobDetail.name = "name";
         jobDetail.showName = "show";
         jobDetail.shot = "shot";
-        jobDetail.os = "someUndefinedOs";
-        assertEquals(logRootDefault + "/show/shot/logs/name--id", jobLogUtil.getJobLogPath(jobDetail));
-    }
-
-    @Test
-    public void testGetJobLogPathSomeOs() {
-        JobDetail jobDetail = new JobDetail();
-        jobDetail.id = "id";
-        jobDetail.name = "name";
-        jobDetail.showName = "show";
-        jobDetail.shot = "shot";
-        jobDetail.os = "some_os";
-        assertEquals(logRootSomeOs + "/show/shot/logs/name--id", jobLogUtil.getJobLogPath(jobDetail));
+        assertEquals(logRoot + "/show/shot/logs/name--id", jobLogUtil.getJobLogPath(jobDetail));
     }
 }
 
